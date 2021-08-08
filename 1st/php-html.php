@@ -21,6 +21,75 @@
             // $select = $select ."<option>Female</option>"; //<select class='form-control'><option>Male</option><option>Female</option>"."</select>
             // $select = $select  ."</select>";
             // echo $select;
+
+
+                // $message = 'couldn"t login';
+            $name = "mohamed";
+            $table = "<table class=\"table table-dark\">
+            <thead>
+              <tr>
+                <th >#</th>
+                <th>".$name."</th>
+                <th >$name</th>
+                <th>Handle</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th>2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th >3</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>";
+
+        //   echo $table;
+
+        //     $table = '<table class="table table-dark">
+        //     <thead>
+        //       <tr>
+        //         <th scope="col">#</th>
+        //         <th scope="col">'.$name.'</th>
+        //         <th scope="col">Last</th>
+        //         <th scope="col">Handle</th>
+        //       </tr>
+        //     </thead>
+        //     <tbody>
+        //       <tr>
+        //         <th scope="row">1</th>
+        //         <td>Mark</td>
+        //         <td>Otto</td>
+        //         <td>@mdo</td>
+        //       </tr>
+        //       <tr>
+        //         <th scope="row">2</th>
+        //         <td>Jacob</td>
+        //         <td>Thornton</td>
+        //         <td>@fat</td>
+        //       </tr>
+        //       <tr>
+        //         <th scope="row">3</th>
+        //         <td>Larry</td>
+        //         <td>the Bird</td>
+        //         <td>@twitter</td>
+        //       </tr>
+        //     </tbody>
+        //   </table>';
+        //     echo $table;
+
       ?>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
