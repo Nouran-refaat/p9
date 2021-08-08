@@ -1,0 +1,16 @@
+/tasks
+/AdminLTE-3.1.0-rc
+Dashboard/node_modules
+Dashboard/public/hot
+Dashboard/public/storage
+Dashboard/storage/*.key
+Dashboard/vendor
+Dashboard/.env
+Dashboard/.env.backup
+Dashboard/.phpunit.result.cache
+Dashboard/Homestead.json
+Dashboard/Homestead.yaml
+Dashboard/npm-debug.log
+Dashboard/yarn-error.log
+
+
