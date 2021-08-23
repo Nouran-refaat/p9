@@ -1,5 +1,5 @@
 <?php 
-class registerRequest {
+class loginRequest {
     private $email ;
     private $password;
     private $confirmPassword;
@@ -77,31 +77,9 @@ class registerRequest {
         if(empty($this->password)){
             $errors['password-required'] = "<div class='alert alert-danger'> Password Is Required </div>";
         }
-        if(empty($this->confirmPassword)){
-            $errors['confirmPassword-required'] = "<div class='alert alert-danger'> Confirm Password Is Required </div>";
-        }
-
         if(empty($errors)){
-            if($this->password != $this->confirmPassword){
-                $errors['password-confrim'] = "<div class='alert alert-danger'> Confirm Password Dosen't Match Your Password </div>";
-            }
-
             if(!preg_match($pattern,$this->password)){
-                $errors['password-pattern'] = "<div class='alert alert-danger'> Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character </div>";
-            }
-        }
-        return $errors;
-    }
-    public function emailValidation()
-    {
-        $errors = [];
-        $pattern = "/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/";
-        if(empty($this->email)){
-            $errors['email-required'] = "<div class='alert alert-danger'> Email Is Required </div>";
-        }
-        if(empty($errors)){
-            if(!preg_match($pattern,$this->email)){
-                $errors['email-pattern'] = "<div class='alert alert-danger'> Wrong Email Format </div>";
+                $errors['password-pattern'] = "<div class='alert alert-danger'> Athentication Failed </div>";
             }
         }
         return $errors;

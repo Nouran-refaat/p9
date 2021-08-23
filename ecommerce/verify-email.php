@@ -1,10 +1,8 @@
 <?php
 include_once "layouts/header.php";
 include_once "App/middlewares/guest.php";
-include_once "layouts/nav.php";
-include_once "App/Validations/registerRequest.php";
-include_once "App/Validations/loginRequest.php";
 include_once "App/Models/User.php";
+include_once "App/Validations/registerRequest.php";
 //Import PHPMailer classes into the global namespace
 //These must be at the top of your script, not inside a function
 use PHPMailer\PHPMailer\PHPMailer;
@@ -12,29 +10,22 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 //Load Composer's autoloader
 require 'vendor/autoload.php';
-
-if(isset($_POST['login'])){
+if (isset($_POST['verify-email'])) {
     // validation
     $errors = [];
     $emailValidation = new registerRequest;
     $emailValidation->setEmail($_POST['email']);
     $emailValidationResult = $emailValidation->emailValidation();
-
-    $passwordValidation = new loginRequest;
-    $passwordValidation->setPassword($_POST['password']);
-    $passwordValidationResult = $passwordValidation->passwordValidation();
-
-    if(empty($emailValidationResult) AND empty($passwordValidationResult)){
-        $checkUser = new user;
-        $checkUser->setEmail($_POST['email']);
-        $checkUser->setPassword($_POST['password']);
-        $loginResult = $checkUser->login();
-        if($loginResult){
-            $loggedInUser = $loginResult->fetch_object();
-            if($loggedInUser->status == 1){
-                $_SESSION['user'] = $loggedInUser;
-                header('location:index.php');
-            }elseif($loggedInUser->status == 2){
+    if (empty($emailValidationResult)) {
+        $checkEmail = new user;
+        $checkEmail->setEmail($_POST['email']);
+        $checkEmailResult = $checkEmail->emailCheck();
+        if ($checkEmailResult) {
+            $forgetPasswordUser = $checkEmailResult->fetch_object();
+            $code = rand(10000, 99999);
+            $checkEmail->setCode($code);
+            $updateCodeResult = $checkEmail->updateCode();
+            if ($updateCodeResult) {
                 //Create an instance; passing `true` enables exceptions
                 $mail = new PHPMailer(true);
                 try {
@@ -55,34 +46,32 @@ if(isset($_POST['login'])){
                     //Content
                     $mail->isHTML(true);                                  //Set email format to HTML
                     $mail->Subject = 'Verification Code';
-                    $mail->Body    = "Dear $loggedInUser->name,<br>Your Veification code:<b>$loggedInUser->code</b><br>Thank You.";
+                    $mail->Body    = "Dear $forgetPasswordUser->name,<br>Your Veification code:<b>$code</b><br>Thank You.";
 
                     $mail->send();
                     // header to check-code page
                     $_SESSION['check-code-email'] = $_POST['email'];
-                    header('location:check-code.php?page=login');
+                    header('location:check-code.php?page=verify');
                 } catch (Exception $e) {
                     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
                 }
+            } else {
+                $errors['something-wrong'] = "<div class='alert alert-danger'> Something Went Wrong </div>";
             }
-        }else{
-            $errors['authentication-failed'] = "<div class='alert alert-danger'> Athentication Failed </div>";
+        } else {
+            $errors['wrong-email'] = "<div class='alert alert-danger'> Email dosen't exists in our records </div>";
         }
-    }   
-    // check on (email,password)
-    // => wrong => error message
-    // => correct => check status => 1 => session => index page
-    // => status = 2 => send mail => check code page
+    }
 }
 ?>
 <!-- Breadcrumb Area Start -->
 <div class="breadcrumb-area bg-image-3 ptb-150">
     <div class="container">
         <div class="breadcrumb-content text-center">
-            <h3>LOGIN</h3>
+            <h3>Verify Email</h3>
             <ul>
                 <li><a href="index.php">Home</a></li>
-                <li class="active">Login</li>
+                <li class="active">Verify Email</li>
             </ul>
         </div>
     </div>
@@ -95,41 +84,32 @@ if(isset($_POST['login'])){
                 <div class="login-register-wrapper">
                     <div class="login-register-tab-list nav">
                         <a class="active" data-toggle="tab" href="#lg1">
-                            <h4> login </h4>
+                            <h4> Verify Email </h4>
                         </a>
                     </div>
                     <div class="tab-content">
                         <div id="lg1" class="tab-pane active">
                             <div class="login-form-container">
                                 <div class="login-register-form">
-                                    <form  method="post">
-                                        <input type="text" name="email" placeholder="Email" value="<?php if(isset($_POST['email'])){echo $_POST['email'];} ?>">
-                                        <?php 
-                                            if(!empty($emailValidationResult)){
-                                                foreach ($emailValidationResult as $key => $error) {
-                                                    echo $error;
-                                                }
-                                            }
-                                        ?>
-                                        <input type="password" name="password" placeholder="Password">
-                                        <?php 
-                                         if(!empty($passwordValidationResult)){
-                                            foreach ($passwordValidationResult as $key => $error) {
+                                    <form method="post">
+                                        <input type="email" name="email" placeholder="Email">
+                                        <?php
+                                        if (!empty($emailValidationResult)) {
+                                            foreach ($emailValidationResult as $key => $error) {
                                                 echo $error;
                                             }
                                         }
-                                        if(!empty($errors)){
+
+                                        if (!empty($errors)) {
                                             foreach ($errors as $key => $error) {
                                                 echo $error;
                                             }
                                         }
-                                      
+
+                                        
                                         ?>
                                         <div class="button-box">
-                                            <div class="login-toggle-btn">
-                                                <a href="verify-email.php">Forgot Password?</a>
-                                            </div>
-                                            <button name="login" type="submit"><span>Login</span></button>
+                                            <button name="verify-email" type="submit"><span>Verify Email</span></button>
                                         </div>
                                     </form>
                                 </div>

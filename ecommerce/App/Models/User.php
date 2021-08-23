@@ -263,7 +263,38 @@ class User extends database implements operation{
         return $this->runDQL($query);
     }
 
+    public function checkCode()
+    {
+        $query = "SELECT `users`.* FROM `users` WHERE `users`.`email` = '$this->email' AND `users`.`code` = $this->code";
+        return $this->runDQL($query);
+    }
 
+
+    public function updateStatus()
+    {
+        $query = "UPDATE `users` SET `users`.`status` = $this->status WHERE `users`.`email` = '$this->email'";
+        return $this->runDML($query);
+    }
+
+    public function login()
+    {
+        $query = "SELECT `users`.* FROM `users` WHERE `users`.`email` = '$this->email' AND `users`.`password` ='$this->password'";
+        return $this->runDQL($query);
+    }
+
+    public function updateCode()
+    {
+        $query = "UPDATE `users` SET `users`.`code` = $this->code WHERE `users`.`email` = '$this->email'";
+        return $this->runDML($query);
+    }
+
+    public function updatePassword()
+    {
+        $query = "UPDATE `users` SET `users`.`password` = '$this->password' WHERE `users`.`email` = '$this->email'";
+        return $this->runDML($query);
+    }
+
+    
     
 }
 

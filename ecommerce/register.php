@@ -1,6 +1,7 @@
 <?php
 
 include_once "layouts/header.php";
+include_once "App/middlewares/guest.php";
 include_once "layouts/nav.php";
 include_once "App/Validations/registerRequest.php";
 include_once "App/Models/User.php";
@@ -69,11 +70,11 @@ if ($_POST) {
 
                     $mail->send();
                     // header to check-code page
-                    header('location:check-code.php');
+                    $_SESSION['check-code-email'] = $_POST['email'];
+                    header('location:check-code.php?page=register');
                 } catch (Exception $e) {
                     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
                 }
-                die;
                 
             } else {
                 $errors['someThing'] = "<div class='alert alert-danger'> Something Went Wrong </div>";

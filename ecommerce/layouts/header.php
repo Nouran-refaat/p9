@@ -1,4 +1,7 @@
-<?php ob_start(); ?>
+<?php
+ob_start();
+session_start();
+?>
 <!doctype html>
 <html class="no-js" lang="zxx">
 
@@ -27,4 +30,5 @@
     <link rel="stylesheet" href="assets/css/responsive.css">
     <script src="assets/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
+
 <body>
