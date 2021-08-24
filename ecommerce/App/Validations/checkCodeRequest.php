@@ -14,6 +14,8 @@ class checkCodeRequest
                             return $queryString['page'];
                         case 'verify':
                             return $queryString['page'];
+                        case 'my-account':
+                            return $queryString['page'];
                         default:
                             return NULL;
                     }

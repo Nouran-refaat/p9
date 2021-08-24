@@ -246,7 +246,14 @@ class User extends database implements operation{
     }
     public function updateData()
     {
-        # code...
+        $query =    "   UPDATE `users` 
+                        SET `users`.`name` = '$this->name',`users`.`phone` = '$this->phone',`users`.`gender` = '$this->gender'"; 
+                        if($this->image){
+                            $query.= ",`users`.`image` = '$this->image'";
+                        }
+        $query .=   "   WHERE `users`.`email` = '$this->email'
+                    ";
+        return $this->runDML($query);
     }
     public function deleteData()
     {
@@ -293,6 +300,15 @@ class User extends database implements operation{
         $query = "UPDATE `users` SET `users`.`password` = '$this->password' WHERE `users`.`email` = '$this->email'";
         return $this->runDML($query);
     }
+
+    public function updateEmail()
+    {
+        $query =    "UPDATE `users`
+                    SET `users`.`email` = '$this->email',`users`.`code` = $this->code,`users`.`status` = $this->status
+                    WHERE `users`.`id` = '$this->id'";
+        return $this->runDML($query);
+    }
+    
 
     
     

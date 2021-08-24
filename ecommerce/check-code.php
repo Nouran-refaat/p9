@@ -13,6 +13,7 @@ if ($queryStringResult) {
 } else {
     header('location:errors/404.php');
 }
+
 if (isset($_POST['check-code'])) {
     $errors = [];
     if (empty($_POST['code'])) {
@@ -38,6 +39,10 @@ if (isset($_POST['check-code'])) {
                 } elseif ($page == 'verify') {
                     $_SESSION['check-code-email'] = $user->email;
                     header('location:set-password.php');
+                }elseif($page == 'my-account'){
+                    unset($_SESSION['check-code-email']);
+                    $_SESSION['user'] = $user;
+                    header('location:my-account.php');
                 }
             } else {
                 $errors['something-wrong'] = "<div class='alert alert-danger'> something went wrong </div>";
