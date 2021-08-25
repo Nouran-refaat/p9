@@ -3,12 +3,13 @@
 include_once "Connection/database.php";
 include_once "Connection/operation.php";
 
-class Brand extends database implements operation {
+class Subcategory extends database implements operation {
 
     private $id;
     private $name;
     private $status;
     private $image;
+    private $category_id;
     private $created_at;
     private $updated_at;
     
@@ -93,6 +94,26 @@ class Brand extends database implements operation {
     }
 
     /**
+     * Get the value of category_id
+     */ 
+    public function getCategory_id()
+    {
+        return $this->category_id;
+    }
+
+    /**
+     * Set the value of category_id
+     *
+     * @return  self
+     */ 
+    public function setCategory_id($category_id)
+    {
+        $this->category_id = $category_id;
+
+        return $this;
+    }
+
+    /**
      * Get the value of created_at
      */ 
     public function getCreated_at()
@@ -133,6 +154,8 @@ class Brand extends database implements operation {
     }
 
 
+
+
     
     public function insertData()
     {
@@ -148,15 +171,22 @@ class Brand extends database implements operation {
     }
     public function selectData()
     {
-        return $this->runDQL("SELECT `brands`.`id`,`brands`.`name` FROM `brands` WHERE `brands`.`status` = 1 ORDER BY `brands`.`name` ASC");
-
+        # code...
     }
 
-    public function searchOnBrand()
+    public function getSubsFromCats()
     {
-        return $this->runDQL("SELECT `brands`.`id`,`brands`.`name` 
-        FROM `brands` WHERE `brands`.`id` = $this->id AND `brands`.`status` = 1");
+        return $this->runDQL("SELECT `Subcategories`.`id`,`subcategories`.`name` 
+        FROM `subcategories` WHERE `subcategories`.`category_id` = $this->category_id AND `subcategories`.`status` = 1 ORDER BY `subcategories`.`name`");
     }
+
+    public function searchOnSub()
+    {
+        return $this->runDQL("SELECT `Subcategories`.`id`,`subcategories`.`name` 
+        FROM `subcategories` WHERE `subcategories`.`id` = $this->id AND `subcategories`.`status` = 1");
+    }
+
+    
 
     
 }

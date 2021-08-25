@@ -3,7 +3,7 @@
 include_once "Connection/database.php";
 include_once "Connection/operation.php";
 
-class Brand extends database implements operation {
+class Category extends database implements operation {
 
     private $id;
     private $name;
@@ -148,15 +148,34 @@ class Brand extends database implements operation {
     }
     public function selectData()
     {
-        return $this->runDQL("SELECT `brands`.`id`,`brands`.`name` FROM `brands` WHERE `brands`.`status` = 1 ORDER BY `brands`.`name` ASC");
-
+        return $this->runDQL("SELECT `categories`.`id`,`categories`.`name` FROM `categories` WHERE `categories`.`status` = 1 ORDER BY `categories`.`name` ASC");
     }
 
-    public function searchOnBrand()
+ 
+
+    public function searchOnCategory()
     {
-        return $this->runDQL("SELECT `brands`.`id`,`brands`.`name` 
-        FROM `brands` WHERE `brands`.`id` = $this->id AND `brands`.`status` = 1");
+        return $this->runDQL("SELECT `categories`.`id`
+        FROM `categories` WHERE `categories`.`id` = $this->id AND `categories`.`status` = 1");    
     }
+
+    public function productsByCat()
+    {
+        return $this->runDQL("SELECT
+                                `categories`.`id` AS `category_id`,
+                                `categories`.`name` AS `category_name`,
+                                `products`.*
+                            FROM
+                                `categories`
+                            JOIN `subcategories`
+                            ON `categories`.`id` = `subcategories`.`category_id`
+                            JOIN `products`
+                            ON `products`.`subcategory_id` = `subcategories`.`id`
+                            WHERE
+                                `categories`.`id` = $this->id AND `categories`.`status` = 1");    
+    }
+
+    
 
     
 }

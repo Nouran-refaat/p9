@@ -1,4 +1,12 @@
 <!-- header start -->
+<?php 
+include_once "App/Models/Category.php";
+include_once "App/Models/Subcategory.php";
+
+$categoryObj = new Category;
+$subcategoryObj = new Subcategory;
+
+?>
 <header class="header-area gray-bg clearfix">
     <div class="header-bottom">
         <div class="container">
@@ -21,50 +29,35 @@
                                     </li>
                                     <li class="mega-menu-position top-hover"><a href="shop.php">Categories</a>
                                         <ul class="mega-menu">
-                                            <li>
-                                                <ul>
-                                                    <li class="mega-menu-title">Categories 01</li>
-                                                    <li><a href="shop.php">Aconite</a></li>
-                                                    <li><a href="shop.php">Ageratum</a></li>
-                                                    <li><a href="shop.php">Allium</a></li>
-                                                    <li><a href="shop.php">Anemone</a></li>
-                                                    <li><a href="shop.php">Angelica</a></li>
-                                                    <li><a href="shop.php">Angelonia</a></li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                <ul>
-                                                    <li class="mega-menu-title">Categories 02</li>
-                                                    <li><a href="shop.php">Balsam</a></li>
-                                                    <li><a href="shop.php">Baneberry</a></li>
-                                                    <li><a href="shop.php">Bee Balm</a></li>
-                                                    <li><a href="shop.php">Begonia</a></li>
-                                                    <li><a href="shop.php">Bellflower</a></li>
-                                                    <li><a href="shop.php">Bergenia</a></li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                <ul>
-                                                    <li class="mega-menu-title">Categories 03</li>
-                                                    <li><a href="shop.php">Caladium</a></li>
-                                                    <li><a href="shop.php">Calendula</a></li>
-                                                    <li><a href="shop.php">Carnation</a></li>
-                                                    <li><a href="shop.php">Catmint</a></li>
-                                                    <li><a href="shop.php">Celosia</a></li>
-                                                    <li><a href="shop.php">Chives</a></li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                <ul>
-                                                    <li class="mega-menu-title">Categories 04</li>
-                                                    <li><a href="shop.php">Daffodil</a></li>
-                                                    <li><a href="shop.php">Dahlia</a></li>
-                                                    <li><a href="shop.php">Daisy</a></li>
-                                                    <li><a href="shop.php">Diascia</a></li>
-                                                    <li><a href="shop.php">Dusty Miller</a></li>
-                                                    <li><a href="shop.php">Dame’s Rocket</a></li>
-                                                </ul>
-                                            </li>
+                                            <?php $categoriesResult = $categoryObj->selectData();
+                                            if ($categoriesResult) {
+                                                $categories = $categoriesResult->fetch_all(MYSQLI_ASSOC);
+                                                foreach ($categories as $index => $category) { ?>
+                                                    <li>
+                                                        <ul>
+                                                            <li class="mega-menu-title"><?= $category['name'] ?></li>
+                                                            <?php 
+                                                                $subcategoryObj->setCategory_id($category['id']);
+                                                                $subsResult = $subcategoryObj->getSubsFromCats();
+                                                                if($subsResult){
+                                                                    $subs = $subsResult->fetch_all(MYSQLI_ASSOC);
+                                                                    foreach ($subs as $key => $sub) { ?>
+                                                                        <li><a href="shop.php?sub=<?= $sub['id'] ?>"><?= $sub['name'] ?></a></li>
+                                                                    <?php }
+                                                                }else{
+                                                                    echo "No Sub Categories Yet";
+                                                                }
+                                                            ?>
+                                                            
+
+                                                        </ul>
+                                                    </li>
+                                            <?php }
+                                            } else {
+                                                echo "No Categories Yet";
+                                            }
+                                            ?>
+
                                         </ul>
                                     </li>
 
