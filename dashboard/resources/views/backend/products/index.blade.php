@@ -31,7 +31,11 @@
                     <td>{{$product->status ? 'Active' : 'Not Active'}}</td>
                     <td>
                         <a href="{{route('products.edit',$product->id)}}" class="btn btn-warning btn-small rounded"> Edit </a>
-                        <a href="" class="btn btn-danger btn-small rounded"> Delete </a>
+                        <form class="d-inline" method="post" action="{{route('products.destroy',$product->id)}}">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger btn-small rounded"> DELETE </button>
+                        </form>
                     </td>
                 </tr>
             @empty

@@ -1,8 +1,11 @@
 <?php
 
-use App\Http\Controllers\backend\indexController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\backend\indexController;
 use App\Http\Controllers\backend\ProductController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,8 +17,22 @@ use App\Http\Controllers\backend\ProductController;
 |
 */
 
-Route::get('/', [indexController::class,'index']);
-Route::get('products/all',[ProductController::class,'index'])->name('products.index');
-Route::get('products/create',[ProductController::class,'create'])->name('products.create');
-Route::get('products/edit/{id}',[ProductController::class,'edit'])->name('products.edit');
-Route::post('products/store',[ProductController::class,'store'])->name('products.store');
+Route::get('/', [indexController::class, 'index'])->name('index');
+
+Route::group(['prefix' => 'dashboard','middleware'=>'verified'], function () {
+    Route::get('/', [indexController::class, 'dashboard'])->name('dashboard');
+    Route::group(['prefix' => 'products','as'=>'products.'], function () {
+        Route::get('all', [ProductController::class, 'index'])->name('index');
+        Route::get('create', [ProductController::class, 'create'])->name('create')->middleware('password.confirm');
+        Route::get('edit/{id}', [ProductController::class, 'edit'])->name('edit');
+        Route::post('store', [ProductController::class, 'store'])->name('store');
+        Route::put('update/{product_id}', [ProductController::class, 'update'])->name('update');
+        Route::delete('{id}/destroy', [ProductController::class, 'destroy'])->name('destroy');
+    });
+});
+
+
+
+Auth::routes(['verify' => true,'register' => false]);
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
