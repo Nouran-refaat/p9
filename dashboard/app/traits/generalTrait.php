@@ -13,10 +13,13 @@ trait generalTrait {
     public function deletePhoto($table,$id)
     {
         $oldPhoto = DB::table($table)->select('image')->where('id', $id)->first()->image;
-        $photoPath = public_path("images/$table/" . $oldPhoto);
-        if (file_exists($photoPath)) {
-            unlink($photoPath);
+        if($oldPhoto){
+            $photoPath = public_path("images/$table/" . $oldPhoto);
+            if (file_exists($photoPath)) {
+                unlink($photoPath);
+            }
         }
+
     }
 
      // return data
